@@ -1,8 +1,10 @@
 .DS_Store
+Thumbs.db
 
 # IDEs
 .idea/
 .vscode/
+.vs/
 
 # Local agent tooling
 .claude/settings.local.json
@@ -13,9 +15,24 @@ opencode.jsonc
 node_modules/
 dist/
 .rsbuild/
+.modern/
 .cache/
+coverage/
+.npmrc
+.env
+.env.*
+!.env.example
+
+# Browser tests (Playwright/RSTest)
+playwright-report/
+test-results/
+blob-report/
 
 # .NET
 **/bin/
 **/obj/
-**/.vs/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
