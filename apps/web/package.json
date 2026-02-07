@@ -6,25 +6,22 @@
   "scripts": {
     "dev": "npm run dev:api & npm run dev:fe",
     "dev:fe": "rsbuild dev",
-    "dev:api": "tsx --watch server/index.ts",
-    "dev:mock": "tsx mock/mock-server.ts",
+    "dev:api": "dotnet watch --project ../api/Fhas.Api/Fhas.Api.csproj run --urls http://localhost:8080",
     "build": "rsbuild build && npm run likec4:build",
-    "start": "NODE_ENV=production tsx server/index.ts",
-    "test": "rstest --project api",
+    "start": "rsbuild preview",
+    "test": "npm run check",
     "test:browser": "rstest --project browser",
-    "test:all": "rstest --project api && rstest --project browser",
+    "test:all": "npm run check && rstest --project browser",
     "test:watch": "rstest --watch",
     "test:coverage": "rstest --coverage",
     "test:browser:install": "npx playwright install chromium",
-    "lint": "rslint src server mock",
-    "lint:fix": "rslint --fix src server mock",
+    "lint": "rslint src",
+    "lint:fix": "rslint --fix src",
     "check": "npm run lint && tsc --noEmit",
     "likec4": "likec4 serve likec4",
     "likec4:build": "likec4 build likec4 -o likec4/dist --base ${LIKEC4_BASE:-/architecture/}"
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.0",
-    "hono": "^4.7.10",
     "openai": "^6.17.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -42,7 +39,6 @@
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "likec4": "^1.48.0",
-    "tsx": "^4.19.4",
     "typescript": "^5.9.3"
   }
 }

@@ -17,11 +17,5 @@ export default defineConfig({
         headless: process.env.CI === 'true',
       },
     },
-    {
-      name: 'api',
-      globals: true,
-      testEnvironment: 'node',
-      include: ['server/**/*.test.ts'],
-    },
   ],
 });

@@ -83,8 +83,8 @@ const Page: React.FC = () => {
 
   return (
     <main style={{ fontFamily: 'system-ui, sans-serif', padding: '2rem' }}>
-      <h1>Full-Stack AI RS Template</h1>
-      <p>Rsbuild + Hono + React Router + Rstest + OpenRouter (Grok)</p>
+      <h1>FHAS</h1>
+      <p>Rsbuild + React Router + C# API + OpenRouter (Grok)</p>
 
       <section style={{ marginBottom: '2rem' }}>
         <h2>Counter Demo</h2>
@@ -154,7 +154,7 @@ const Page: React.FC = () => {
                     color: msg.role === 'user' ? '#1565c0' : '#424242',
                   }}
                 >
-                  {msg.role === 'user' ? '📤 You' : '🤖 Assistant'}:
+                  {msg.role === 'user' ? 'You' : 'Assistant'}:
                 </strong>
                 <div
                   style={{

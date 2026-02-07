@@ -10,5 +10,5 @@
     "skipLibCheck": true,
     "types": ["node", "@rstest/core/globals"]
   },
-  "include": ["src", "server", "mock", "rsbuild.config.ts", "rstest.config.ts"]
+  "include": ["src", "rsbuild.config.ts", "rstest.config.ts"]
 }
