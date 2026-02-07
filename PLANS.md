@@ -95,3 +95,9 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
   - Done: Imported `venikman/poke` template into `apps/web` and verified frontend tests.
   - Next: Replace the Node/Hono API with a C# backend in `apps/api` (OpenAI-compatible HTTP surface).
   - Blockers: None.
+- 2026-02-07T03:44:57Z
+  - Done: Added C# API (`apps/api/Fhas.Api`) implementing `GET /api/v1/chat/health` and `POST /api/v1/chat/completions` with OpenRouter proxy + mock mode.
+  - Done: Added backend integration tests (`apps/api/Fhas.Api.Tests`) and verified `dotnet test`.
+  - Done: Updated web dev proxy to the C# API; `apps/web` no longer compiles/depends on the Node server.
+  - Next: Decide how deeply to adopt Microsoft Agent Framework in the first “skill” and whether to add a full .NET Aspire AppHost (not just dashboards).
+  - Blockers: None.
