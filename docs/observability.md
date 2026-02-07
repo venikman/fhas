@@ -5,6 +5,7 @@ The API (`apps/api/Fhas.Api`) is instrumented with OpenTelemetry:
 - HttpClient tracing for upstream calls (OpenRouter)
 - A custom span around the chat completion step (`ActivitySource` = `Fhas.Api.Chat`)
 - A custom span around agent execution (`ActivitySource` = `Fhas.Agent.Runtime`)
+- Internal skill/tool invocation spans (`skill.invoke`)
 
 ## Default behavior
 - In `Development`, traces are exported to the console if no OTLP endpoint is configured.

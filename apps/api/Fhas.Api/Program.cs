@@ -96,7 +96,12 @@ builder.Services.AddOpenTelemetry()
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
             .AddSource(ChatCompletionsEndpoint.ActivitySourceName)
-            .AddSource(OpenRouterAgentRunner.ActivitySourceName);
+            .AddSource(OpenRouterAgentRunner.ActivitySourceName)
+            // Agent Framework / Microsoft.Extensions.AI spans (exact source names; no wildcards).
+            .AddSource("Microsoft.Extensions.AI")
+            .AddSource("Microsoft.Extensions.AI.OpenAI")
+            .AddSource("Microsoft.Agents.AI")
+            .AddSource("Microsoft.Agents.AI.OpenAI");
 
         var hasOtlpTraces =
             !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT")) ||
@@ -140,6 +145,23 @@ builder.Logging.AddOpenTelemetry(options =>
 var app = builder.Build();
 
 var startedAt = Stopwatch.StartNew();
+
+// Add trace correlation header for every response (including health endpoints).
+app.Use((ctx, next) =>
+{
+    var traceId = Activity.Current?.TraceId.ToString();
+    ctx.Response.OnStarting(() =>
+    {
+        if (!ctx.Response.Headers.ContainsKey("x-trace-id"))
+        {
+            ctx.Response.Headers.TryAdd("x-trace-id", traceId ?? Activity.Current?.TraceId.ToString() ?? string.Empty);
+        }
+
+        return Task.CompletedTask;
+    });
+
+    return next();
+});
 
 app.UseCors();
 app.UseRateLimiter();

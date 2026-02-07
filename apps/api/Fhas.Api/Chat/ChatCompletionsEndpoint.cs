@@ -66,32 +66,6 @@ public static class ChatCompletionsEndpoint
             return;
         }
 
-        if (config["OPENROUTER_MOCK"] == "1")
-        {
-            var mock = new
-            {
-                id = $"chatcmpl-mock-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}",
-                @object = "chat.completion",
-                created = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
-                model = body.Model ?? OpenRouterAgentRunner.DefaultModel,
-                choices = new[]
-                {
-                    new
-                    {
-                        index = 0,
-                        message = new { role = "assistant", content = "Mocked response." },
-                        finish_reason = "stop",
-                    },
-                },
-                usage = new { prompt_tokens = 10, completion_tokens = 3, total_tokens = 13 },
-            };
-
-            httpContext.Response.StatusCode = StatusCodes.Status200OK;
-            httpContext.Response.ContentType = "application/json";
-            await JsonSerializer.SerializeAsync(httpContext.Response.Body, mock, JsonOptions, cancellationToken);
-            return;
-        }
-
         var apiToken = config["API_TOKEN"];
         if (!string.IsNullOrWhiteSpace(apiToken))
         {
@@ -135,6 +109,32 @@ public static class ChatCompletionsEndpoint
                 code: "model_not_allowed",
                 statusCode: StatusCodes.Status400BadRequest,
                 cancellationToken);
+            return;
+        }
+
+        if (config["OPENROUTER_MOCK"] == "1")
+        {
+            var mock = new
+            {
+                id = $"chatcmpl-mock-{DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}",
+                @object = "chat.completion",
+                created = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                model,
+                choices = new[]
+                {
+                    new
+                    {
+                        index = 0,
+                        message = new { role = "assistant", content = "Mocked response." },
+                        finish_reason = "stop",
+                    },
+                },
+                usage = new { prompt_tokens = 10, completion_tokens = 3, total_tokens = 13 },
+            };
+
+            httpContext.Response.StatusCode = StatusCodes.Status200OK;
+            httpContext.Response.ContentType = "application/json";
+            await JsonSerializer.SerializeAsync(httpContext.Response.Body, mock, JsonOptions, cancellationToken);
             return;
         }
 

@@ -125,3 +125,8 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
   - Done: Updated docs for `OPENROUTER_API_KEY` + `MODEL_ALLOWLIST`; validated `dotnet build`, `dotnet test`, and a mock-mode curl smoke run.
   - Next: Add explicit per-skill/tool spans and repo ops playbooks (Grafana Assistant rules/playbooks guidance).
   - Blockers: None.
+- 2026-02-07T06:33:40Z
+  - Done: Added explicit OpenTelemetry spans for skill/tool invocation (`skill.invoke`) and ensured `x-trace-id` is returned on all endpoints.
+  - Done: Added a test proving skill invocation emits an Activity; validated `dotnet build` and `dotnet test`.
+  - Next: Add ops playbooks + `docs/ops/grafana-assistant.md`.
+  - Blockers: None.
