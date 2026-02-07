@@ -90,8 +90,8 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
 - Use OpenTelemetry as the canonical evidence/telemetry surface so Grafana (and other backends) can be added without app rewrites.
 
 ## Progress log (ISO-8601 timestamps)
-- 2026-02-07T00:00:00Z
-  - Done: Initialized repo and created plan/docs scaffolding.
-  - Next: Import `venikman/poke` into `apps/web`.
+- 2026-02-07T03:31:53Z
+  - Done: Initialized git repo; added baseline docs (`AGENTS.md`, `PLANS.md`, `README.md`) and repo hygiene.
+  - Done: Imported `venikman/poke` template into `apps/web` and verified frontend tests.
+  - Next: Replace the Node/Hono API with a C# backend in `apps/api` (OpenAI-compatible HTTP surface).
   - Blockers: None.
-

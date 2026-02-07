@@ -1,0 +1,48 @@
+{
+  "name": "full-stack-ai-rs-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run dev:api & npm run dev:fe",
+    "dev:fe": "rsbuild dev",
+    "dev:api": "tsx --watch server/index.ts",
+    "dev:mock": "tsx mock/mock-server.ts",
+    "build": "rsbuild build && npm run likec4:build",
+    "start": "NODE_ENV=production tsx server/index.ts",
+    "test": "rstest --project api",
+    "test:browser": "rstest --project browser",
+    "test:all": "rstest --project api && rstest --project browser",
+    "test:watch": "rstest --watch",
+    "test:coverage": "rstest --coverage",
+    "test:browser:install": "npx playwright install chromium",
+    "lint": "rslint src server mock",
+    "lint:fix": "rslint --fix src server mock",
+    "check": "npm run lint && tsc --noEmit",
+    "likec4": "likec4 serve likec4",
+    "likec4:build": "likec4 build likec4 -o likec4/dist --base ${LIKEC4_BASE:-/architecture/}"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "hono": "^4.7.10",
+    "openai": "^6.17.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-router": "^7.6.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.2",
+    "@rsbuild/core": "^1.4.3",
+    "@rsbuild/plugin-react": "^1.4.5",
+    "@rslint/core": "^0.2.0",
+    "@rstest/browser": "^0.8.1",
+    "@rstest/browser-react": "^0.8.1",
+    "@rstest/core": "^0.8.1",
+    "@types/node": "^22.15.30",
+    "@types/react": "^19.2.10",
+    "@types/react-dom": "^19.2.3",
+    "likec4": "^1.48.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.9.3"
+  }
+}

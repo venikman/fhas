@@ -1,0 +1,142 @@
+// Full-Stack AI RS Template - Architecture Model
+// https://likec4.dev
+
+specification {
+  element actor {
+    style {
+      shape person
+      color amber
+    }
+  }
+  element system {
+    style {
+      shape rectangle
+      color slate
+    }
+  }
+  element container {
+    style {
+      shape rectangle
+      color blue
+    }
+  }
+  element component {
+    style {
+      shape rectangle
+      color sky
+    }
+  }
+  element external {
+    style {
+      shape rectangle
+      color gray
+    }
+  }
+
+  relationship async {
+    line dashed
+  }
+
+  tag devOnly
+}
+
+model {
+  actor user {
+    title "User"
+    description "End user interacting with the AI chat application"
+  }
+
+  external openrouter {
+    title "OpenRouter"
+    description "AI inference gateway providing access to 300+ models"
+  }
+
+  system fullStackAI {
+    title "Full-Stack AI RS Template"
+    description "AI-powered chat application with React frontend and Hono API"
+
+    container frontend {
+      title "Frontend"
+      description "React SPA built with Rsbuild"
+
+      component chatUI {
+        title "Chat UI"
+        description "Interactive chat interface"
+      }
+
+      component apiClient {
+        title "API Client"
+        description "OpenAI SDK configured for local API"
+      }
+    }
+
+    container backend {
+      title "API Server"
+      description "Hono HTTP server with security middleware"
+
+      component chatRoutes {
+        title "Chat Routes"
+        description "/api/v1/chat/* endpoints"
+      }
+
+      component rateLimiter {
+        title "Rate Limiter"
+        description "In-memory rate limiting (100 req/min per IP)"
+      }
+
+      component staticServer {
+        title "Static Server"
+        description "Serves frontend in production"
+      }
+    }
+
+    container mockServer {
+      #devOnly
+      title "Mock Server"
+      description "Development server with simulated AI responses"
+
+      component mockResponses {
+        title "Mock Responses"
+        description "Simulated AI completions for local dev"
+      }
+
+      component devProxy {
+        title "Dev Proxy"
+        description "Proxies non-API requests to Rsbuild"
+      }
+    }
+  }
+
+  user -> fullStackAI.frontend.chatUI "Sends messages"
+
+  fullStackAI.frontend.chatUI -> fullStackAI.frontend.apiClient "Uses"
+  fullStackAI.frontend.apiClient -> fullStackAI.backend.chatRoutes "POST /api/v1/chat/completions"
+
+  fullStackAI.backend.chatRoutes -> fullStackAI.backend.rateLimiter "Protected by"
+  fullStackAI.backend.chatRoutes -> openrouter "Forwards requests"
+
+  fullStackAI.backend.staticServer -> fullStackAI.frontend "Serves (production)"
+
+  fullStackAI.frontend.apiClient -> fullStackAI.mockServer.mockResponses "POST (dev:mock mode)" #devOnly
+  fullStackAI.mockServer.devProxy -> fullStackAI.frontend "Proxies static assets" #devOnly
+}
+
+views {
+  view index {
+    title "System Overview"
+    include *
+  }
+
+  view backend of fullStackAI.backend {
+    title "Backend Architecture"
+    include *
+    include fullStackAI.frontend.apiClient
+    include openrouter
+  }
+
+  view devMode {
+    title "Development Mode"
+    include *
+    include element.tag == #devOnly
+  }
+}

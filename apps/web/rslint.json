@@ -1,0 +1,25 @@
+[
+  {
+    "language": "typescript",
+    "files": ["src/**/*.ts", "src/**/*.tsx", "server/**/*.ts", "mock/**/*.ts"],
+    "ignores": ["node_modules/**", "dist/**", "*.config.ts", "*.config.js"],
+    "languageOptions": {
+      "parserOptions": {
+        "project": ["./tsconfig.json"]
+      }
+    },
+    "rules": {
+      "no-var": "error",
+      "prefer-const": "error",
+      "no-param-reassign": "error",
+      "no-loop-func": "error",
+      "no-plusplus": "error",
+      "prefer-arrow-callback": "error",
+      "prefer-rest-params": "error",
+      "prefer-spread": "error",
+      "no-array-constructor": "error",
+      "no-prototype-builtins": "error",
+      "no-unused-vars": "warn"
+    }
+  }
+]
