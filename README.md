@@ -19,6 +19,7 @@ Then open `http://localhost:5173`.
 ## Docs
 - `docs/development.md`
 - `docs/observability.md`
+- `docs/ops/grafana-assistant.md`
 
 ## Status
 Bootstrap in progress. See `PLANS.md`.

@@ -130,3 +130,8 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
   - Done: Added a test proving skill invocation emits an Activity; validated `dotnet build` and `dotnet test`.
   - Next: Add ops playbooks + `docs/ops/grafana-assistant.md`.
   - Blockers: None.
+- 2026-02-07T06:35:43Z
+  - Done: Added repo-first ops guidance: `docs/ops/grafana-assistant.md` plus initial playbooks in `docs/ops/playbooks/`.
+  - Done: Validated `dotnet test` still passes.
+  - Next: (Optional) mirror playbooks into Grafana Cloud and start the first FHIR/SMART skill milestone.
+  - Blockers: None.
