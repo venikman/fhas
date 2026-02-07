@@ -3,11 +3,15 @@
 The API (`apps/api/Fhas.Api`) is instrumented with OpenTelemetry:
 - ASP.NET Core request tracing
 - HttpClient tracing for upstream calls (OpenRouter)
-- A custom span around the chat proxy step (`ActivitySource` = `Fhas.Api.Chat`)
+- A custom span around the chat completion step (`ActivitySource` = `Fhas.Api.Chat`)
+- A custom span around agent execution (`ActivitySource` = `Fhas.Agent.Runtime`)
 
 ## Default behavior
 - In `Development`, traces are exported to the console if no OTLP endpoint is configured.
 - If `OTEL_EXPORTER_OTLP_ENDPOINT` (or per-signal OTLP env vars) is set, the API exports to OTLP instead.
+
+## Correlation
+Each API response includes an `x-trace-id` header. Use it to jump from the UI into traces.
 
 ## Aspire dashboard (local UI)
 You can run the Aspire dashboard standalone and send OTLP to it:
@@ -41,4 +45,3 @@ Notes:
 - If Grafana Cloud expects HTTP/protobuf instead of gRPC, set `OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf`.
 - Add resource attributes as needed:
   - `OTEL_RESOURCE_ATTRIBUTES="deployment.environment=dev,service.namespace=fhas"`
-

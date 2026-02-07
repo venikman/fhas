@@ -1,8 +1,8 @@
 using System.Diagnostics;
 using System.Net.Http.Headers;
-using System.Text.Json;
 using System.Threading.RateLimiting;
 using Fhas.Api.Chat;
+using Fhas.Agent.Runtime;
 using Fhas.Agent.Skills;
 using Microsoft.AspNetCore.RateLimiting;
 using OpenTelemetry.Logs;
@@ -58,16 +58,31 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-builder.Services.AddHttpClient(OpenRouterChatProxy.HttpClientName, client =>
-{
-    client.BaseAddress = new Uri("https://openrouter.ai/api/v1/");
-    client.DefaultRequestHeaders.Accept.Add(
-        new MediaTypeWithQualityHeaderValue("application/json"));
-});
-
 // "Skills" scaffolding (inspired by health-skillz). This stays intentionally minimal for now.
 builder.Services.AddSingleton<ISkill, EchoSkill>();
 builder.Services.AddSingleton<SkillRegistry>();
+builder.Services.AddSingleton<SkillToolCatalog>();
+
+// Typed HttpClient for OpenRouter-backed agent execution.
+builder.Services.AddHttpClient<OpenRouterAgentRunner>((sp, client) =>
+{
+    client.BaseAddress = OpenRouterAgentRunner.OpenRouterEndpoint;
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+    var cfg = sp.GetRequiredService<IConfiguration>();
+
+    var referer = cfg["OPENROUTER_REFERER"];
+    if (!string.IsNullOrWhiteSpace(referer))
+    {
+        client.DefaultRequestHeaders.TryAddWithoutValidation("HTTP-Referer", referer);
+    }
+
+    var title = cfg["OPENROUTER_TITLE"];
+    if (!string.IsNullOrWhiteSpace(title))
+    {
+        client.DefaultRequestHeaders.TryAddWithoutValidation("X-Title", title);
+    }
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -80,7 +95,8 @@ builder.Services.AddOpenTelemetry()
         tracing
             .AddAspNetCoreInstrumentation()
             .AddHttpClientInstrumentation()
-            .AddSource(OpenRouterChatProxy.ActivitySourceName);
+            .AddSource(ChatCompletionsEndpoint.ActivitySourceName)
+            .AddSource(OpenRouterAgentRunner.ActivitySourceName);
 
         var hasOtlpTraces =
             !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("OTEL_EXPORTER_OTLP_ENDPOINT")) ||
@@ -153,7 +169,7 @@ chat.MapGet("/health", () =>
     return Results.Json(res);
 });
 
-chat.MapPost("/completions", OpenRouterChatProxy.HandleAsync);
+chat.MapPost("/completions", ChatCompletionsEndpoint.HandleAsync);
 
 var skills = v1.MapGroup("/skills");
 skills.MapGet("", (SkillRegistry registry) => Results.Json(registry.List()));

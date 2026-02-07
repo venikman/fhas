@@ -116,7 +116,12 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
   - Done: API now exposes `GET /api/v1/skills` and registers a starter `echo` skill.
   - Next: Wire a first real “health skill” (FHIR-aware) behind the agent framework abstractions.
   - Blockers: None.
-- 2026-02-07T09:18:00Z
+- 2026-02-07T06:14:00Z
   - Done: Validated frontend template lock-in: `npm ci`, `npm test`, `npm run build` all succeed in `apps/web`.
   - Next: Replace `/api/v1/chat/completions` internals to run via Microsoft Agent Framework and OpenAI .NET `ChatClient` pointed at OpenRouter.
+  - Blockers: None.
+- 2026-02-07T06:28:27Z
+  - Done: Replaced `/api/v1/chat/completions` to run via Microsoft Agent Framework (`OpenRouterAgentRunner`) with internal skills exposed as function tools.
+  - Done: Updated docs for `OPENROUTER_API_KEY` + `MODEL_ALLOWLIST`; validated `dotnet build`, `dotnet test`, and a mock-mode curl smoke run.
+  - Next: Add explicit per-skill/tool spans and repo ops playbooks (Grafana Assistant rules/playbooks guidance).
   - Blockers: None.
