@@ -24,3 +24,7 @@ This starts:
 - `OPENROUTER_TITLE`: optional header forwarded to OpenRouter as `X-Title`.
 - `CORS_ORIGIN`: comma-separated list of allowed origins. Default is `*` (dev-friendly).
 
+## Useful endpoints
+- `GET http://localhost:8080/api/v1/chat/health`
+- `POST http://localhost:8080/api/v1/chat/completions`
+- `GET http://localhost:8080/api/v1/skills`

@@ -3,6 +3,7 @@ using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Threading.RateLimiting;
 using Fhas.Api.Chat;
+using Fhas.Agent.Skills;
 using Microsoft.AspNetCore.RateLimiting;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -63,6 +64,10 @@ builder.Services.AddHttpClient(OpenRouterChatProxy.HttpClientName, client =>
     client.DefaultRequestHeaders.Accept.Add(
         new MediaTypeWithQualityHeaderValue("application/json"));
 });
+
+// "Skills" scaffolding (inspired by health-skillz). This stays intentionally minimal for now.
+builder.Services.AddSingleton<ISkill, EchoSkill>();
+builder.Services.AddSingleton<SkillRegistry>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -149,6 +154,9 @@ chat.MapGet("/health", () =>
 });
 
 chat.MapPost("/completions", OpenRouterChatProxy.HandleAsync);
+
+var skills = v1.MapGroup("/skills");
+skills.MapGet("", (SkillRegistry registry) => Results.Json(registry.List()));
 
 app.Run();
 

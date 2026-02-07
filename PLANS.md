@@ -101,3 +101,8 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
   - Done: Updated web dev proxy to the C# API; `apps/web` no longer compiles/depends on the Node server.
   - Next: Decide how deeply to adopt Microsoft Agent Framework in the first “skill” and whether to add a full .NET Aspire AppHost (not just dashboards).
   - Blockers: None.
+- 2026-02-07T03:47:26Z
+  - Done: Added `apps/api/Fhas.Agent` (class library) with Microsoft Agent Framework packages referenced and a minimal “skills” scaffold.
+  - Done: API now exposes `GET /api/v1/skills` and registers a starter `echo` skill.
+  - Next: Wire a first real “health skill” (FHIR-aware) behind the agent framework abstractions.
+  - Blockers: None.

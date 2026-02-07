@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/apps/" />
   <Folder Name="/apps/api/">
+    <Project Path="apps/api/Fhas.Agent/Fhas.Agent.csproj" />
     <Project Path="apps/api/Fhas.Api.Tests/Fhas.Api.Tests.csproj" />
     <Project Path="apps/api/Fhas.Api/Fhas.Api.csproj" />
   </Folder>
