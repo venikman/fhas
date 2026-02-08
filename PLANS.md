@@ -86,6 +86,7 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
 
 ## Decisions log (why changes)
 
+- Use `venikman/poke` as the frontend base to preserve familiar tooling.
 - Use an OpenAI-compatible HTTP surface for early UI integration; agent/skill orchestration can evolve behind it without breaking the UI.
 - Use OpenTelemetry as the canonical evidence/telemetry surface so Grafana (and other backends) can be added without app rewrites.
 - LLM provider: OpenRouter first (OpenAI-compatible API).
@@ -93,6 +94,43 @@ Bootstrap a working, reviewable starter repo for an interoperable “health skil
 
 ## Progress log (ISO-8601 timestamps)
 
+Note: older entries are historical and may reference files removed in later cleanups.
+
+- 2026-02-07T03:31:53Z
+  - Done: Initialized git repo; added baseline docs (`AGENTS.md`, `PLANS.md`, `README.md`) and repo hygiene.
+  - Done: Imported `venikman/poke` template into `apps/web` and verified frontend tests.
+  - Next: Replace the Node/Hono API with a C# backend in `apps/api` (OpenAI-compatible HTTP surface).
+  - Blockers: None.
+- 2026-02-07T03:44:57Z
+  - Done: Added C# API (`apps/api/Fhas.Api`) implementing `GET /api/v1/chat/health` and `POST /api/v1/chat/completions` with OpenRouter proxy + mock mode.
+  - Done: Added backend integration tests (`apps/api/Fhas.Api.Tests`) and verified `dotnet test`.
+  - Done: Updated web dev proxy to the C# API; `apps/web` no longer compiles/depends on the Node server.
+  - Next: Decide how deeply to adopt Microsoft Agent Framework in the first “skill” and whether to add a full .NET Aspire AppHost (not just dashboards).
+  - Blockers: None.
+- 2026-02-07T03:47:26Z
+  - Done: Added `apps/api/Fhas.Agent` (class library) with Microsoft Agent Framework packages referenced and a minimal “skills” scaffold.
+  - Done: API now exposes `GET /api/v1/skills` and registers a starter `echo` skill.
+  - Next: Wire a first real “health skill” (FHIR-aware) behind the agent framework abstractions.
+  - Blockers: None.
+- 2026-02-07T06:14:00Z
+  - Done: Validated frontend template lock-in: `npm ci`, `npm test`, `npm run build` all succeed in `apps/web`.
+  - Next: Replace `/api/v1/chat/completions` internals to run via Microsoft Agent Framework and OpenAI .NET `ChatClient` pointed at OpenRouter.
+  - Blockers: None.
+- 2026-02-07T06:28:27Z
+  - Done: Replaced `/api/v1/chat/completions` to run via Microsoft Agent Framework (`OpenRouterAgentRunner`) with internal skills exposed as function tools.
+  - Done: Updated docs for `OPENROUTER_API_KEY` + `MODEL_ALLOWLIST`; validated `dotnet build`, `dotnet test`, and a mock-mode curl smoke run.
+  - Next: Add explicit per-skill/tool spans and repo ops playbooks (Grafana Assistant rules/playbooks guidance).
+  - Blockers: None.
+- 2026-02-07T06:33:40Z
+  - Done: Added explicit OpenTelemetry spans for skill/tool invocation (`skill.invoke`) and ensured `x-trace-id` is returned on all endpoints.
+  - Done: Added a test proving skill invocation emits an Activity; validated `dotnet build` and `dotnet test`.
+  - Next: Add ops playbooks + `docs/ops/grafana-assistant.md`.
+  - Blockers: None.
+- 2026-02-07T06:35:43Z
+  - Done: Added repo-first ops guidance: `docs/ops/grafana-assistant.md` plus initial playbooks in `docs/ops/playbooks/`.
+  - Done: Validated `dotnet test` still passes.
+  - Next: (Optional) mirror playbooks into Grafana Cloud and start the first FHIR/SMART skill milestone.
+  - Blockers: None.
 - 2026-02-07T08:48:39Z
   - Done: Removed `docs/` and cleaned references.
   - Done: `dotnet test --no-restore` passes (6 tests).
